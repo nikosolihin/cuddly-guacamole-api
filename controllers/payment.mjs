@@ -7,10 +7,11 @@ const logger = getLogger('controllers/payment');
  * Get Stuff
  */
 export const getPayment = async (req, res, next) => {
-  logger.verbose('requesting stuff for @%s', username);
-  logger.verbose(`@%s %s a contributor.`, username, contributor ? 'is' : 'is not');
-  const response = await getStuff(user);
+  logger.verbose('requesting stuff for @%s', 'niko');
+  // const response = await getStuff(user);
   return res.status(200).json({
-    error: `Whoops! @${username} has not contributed to ${org} on GitHub.`,
+    error: `Whoops! @ has not contributed.`,
   });
 };
+
+// logger.verbose(`@%s %s a contributor.`, username, contributor ? 'is' : 'is not');
