@@ -1,8 +1,8 @@
 import express from 'express';
 import helmet from 'helmet';
-import { notFound, developmentErrors, productionErrors } from './handlers/errors';
 import cookieParser from 'cookie-parser';
-import transactionRoutes from './routes/transactions.mjs';
+import { notFound, developmentErrors, productionErrors } from './lib/errors';
+import paymentRoutes from './routes/payment.mjs';
 
 const app = express();
 
@@ -16,7 +16,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 // app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/transactions', transactionRoutes);
+app.use('/payment', paymentRoutes);
 
 // catch 404 for routes not found
 app.use(notFound);
