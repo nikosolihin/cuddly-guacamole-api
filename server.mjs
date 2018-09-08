@@ -1,4 +1,4 @@
-import getLogger from './lib/logger.mjs';
+import getLogger from './lib/logger';
 
 const logger = getLogger('server');
 const host = process.env.APP_HOST;

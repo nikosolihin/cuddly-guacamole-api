@@ -1,19 +1,16 @@
-import app from './app.mjs';
-import { startServer } from './server.mjs';
-import { onHttpError, onListening } from './lib/errors.mjs';
-import getLogger from './lib/logger.mjs';
+import createError from 'http-errors';
+import app from './app';
+import { startServer } from './server';
+import { onHttpError, onListening } from './lib/errors';
+import getLogger from './lib/logger';
 
 const logger = getLogger('index');
 
 startServer(app);
 
 //  https://nodejs.org/api/process.html#process_event_unhandledrejection
-process.on('unhandledRejection', (error, p) => {
-  // logger.error('unhandledRejection');
-  console.log(error);
-  console.log('-----------------------------');
-  console.log(p);
-  // logger.error(error);
+process.on('unhandledRejection', error => {
+  logger.error(createError('unhandledRejection Error'));
 });
 
 // https://nodejs.org/api/net.html#net_event_error

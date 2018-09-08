@@ -1,16 +1,17 @@
 {
     "extends": [
+        "eslint:recommended",
         "plugin:prettier/recommended"
     ],
+    "parser": "babel-eslint",
     "parserOptions": {
-        "sourceType": "module",
         "ecmaVersion": 8,
+        "sourceType": "module",
         "ecmaFeatures": {
-            "impliedStrict": true,
-            "classes": true,
+            "experimentalObjectRestSpread": true,
             "modules": true,
-            "spread": true,
-            "restParams": true
+            "impliedStrict": true,
+            "classes": true
         }
     },
     "env": {

@@ -1,6 +1,6 @@
 import createError from 'http-errors';
-import getLogger from '../lib/logger.mjs';
-import { getStuff } from '../lib/payment.mjs';
+import getLogger from '../lib/logger';
+import { chargeCard } from '../lib/payment';
 
 const logger = getLogger('controllers/payment');
 
@@ -13,19 +13,14 @@ export const checkBody = async (req, res, next) => {
     logger.error(err);
     return next(err);
   }
-  console.log('I got body');
   return next();
 };
 
 /**
  * Get Stuff
  */
-export const getPayment = async (req, res, next) => {
-  logger.verbose('requesting stuff for @%s', 'niko');
-  // const response = await getStuff(user);
-  return res.status(200).json({
-    error: `Whoops! @ has not contributed.`,
-  });
+export const createCharge = (req, res) => {
+  const { tokenId, amount, cvc } = req.body;
+  const response = chargeCard(tokenId, amount, cvc);
+  return res.status(200).json(response);
 };
-
-// logger.verbose(`@%s %s a contributor.`, username, contributor ? 'is' : 'is not');

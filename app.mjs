@@ -2,7 +2,7 @@ import express from 'express';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import { notFound, developmentErrors, productionErrors } from './lib/errors';
-import paymentRoutes from './routes/payment.mjs';
+import paymentRoutes from './routes/payment';
 
 const app = express();
 
