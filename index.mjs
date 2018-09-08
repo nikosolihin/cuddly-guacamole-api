@@ -1,6 +1,6 @@
 import app from './app.mjs';
 import { startServer } from './server.mjs';
-import { onHttpError, onListening } from './lib/logger.mjs';
+import { onHttpError, onListening } from './lib/errors.mjs';
 import getLogger from './lib/logger.mjs';
 
 const logger = getLogger('index');

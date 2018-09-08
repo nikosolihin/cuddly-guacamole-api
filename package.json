@@ -4,7 +4,7 @@
   "private": true,
   "main": "index.mjs",
   "scripts": {
-    "start": "node -r dotenv/config --experimental-modules index.mjs"
+    "start": "NODE_ENV=development DEBUG=yicf-giving-api:* nodemon -r dotenv/config --experimental-modules --inspect index.mjs"
   },
   "engines": {
     "node": "10.x.x"
