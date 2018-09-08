@@ -8,9 +8,12 @@ const logger = getLogger('index');
 startServer(app);
 
 //  https://nodejs.org/api/process.html#process_event_unhandledrejection
-process.on('unhandledRejection', error => {
-  logger.error('unhandledRejection');
-  logger.error(error);
+process.on('unhandledRejection', (error, p) => {
+  // logger.error('unhandledRejection');
+  console.log(error);
+  console.log('-----------------------------');
+  console.log(p);
+  // logger.error(error);
 });
 
 // https://nodejs.org/api/net.html#net_event_error
