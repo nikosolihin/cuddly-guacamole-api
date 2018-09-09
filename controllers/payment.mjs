@@ -17,10 +17,10 @@ export const checkBody = async (req, res, next) => {
 };
 
 /**
- * Get Stuff
+ * Initiate credit card charge
  */
-export const createCharge = (req, res) => {
+export const createCharge = async (req, res) => {
   const { tokenId, amount, cvc } = req.body;
-  const response = chargeCard(tokenId, amount, cvc);
-  return res.status(200).json(response);
+  const { status, data } = await chargeCard(tokenId, amount, cvc);
+  return res.status(status).json(data);
 };

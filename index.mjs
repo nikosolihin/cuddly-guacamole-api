@@ -1,7 +1,8 @@
+#!/usr/bin/env node
 import createError from 'http-errors';
 import app from './app';
 import { startServer } from './server';
-import { onHttpError, onListening } from './lib/errors';
+// import { onHttpError, onListening } from './lib/errors';
 import getLogger from './lib/logger';
 
 const logger = getLogger('index');
@@ -14,7 +15,7 @@ process.on('unhandledRejection', error => {
 });
 
 // https://nodejs.org/api/net.html#net_event_error
-app.on('error', onHttpError);
+// app.on('error', onHttpError);
 
 // https://nodejs.org/api/net.html#net_event_listening
-app.on('listening', onListening);
+// app.on('listening', onListening);
