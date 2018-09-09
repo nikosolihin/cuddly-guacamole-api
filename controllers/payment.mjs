@@ -1,6 +1,6 @@
 import createError from 'http-errors';
 import getLogger from '../lib/logger';
-import { chargeCard } from '../lib/payment';
+import { chargeCard } from '../lib/xendit';
 
 const logger = getLogger('controllers/payment');
 
@@ -20,7 +20,7 @@ export const checkBody = async (req, res, next) => {
  * Initiate credit card charge
  */
 export const createCharge = async (req, res) => {
-  const { tokenId, amount, cvc } = req.body;
-  const { status, data } = await chargeCard(tokenId, amount, cvc);
+  const { tokenId, maskedCard, amount, cvc } = req.body;
+  const { status, data } = await chargeCard(tokenId, maskedCard, amount, cvc);
   return res.status(status).json(data);
 };
