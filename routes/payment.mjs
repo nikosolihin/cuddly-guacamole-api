@@ -1,9 +1,10 @@
 import express from 'express';
 import getLogger from '../lib/logger';
 import { wrapAsync } from '../lib/errors';
-import { checkBody, createCharge, returnInvoiceData } from '../controllers/payment';
+import { checkBody } from '../controllers';
+import { createCharge } from '../controllers/payment';
 import { createTransaction, updateTransactionStatus } from '../controllers/wordpress';
-import { sendEmail } from '../controllers/confirmation';
+import { sendEmail, returnConfirmationData } from '../controllers/confirmation';
 
 const router = express.Router();
 const logger = getLogger('routes/payment');
@@ -17,7 +18,7 @@ router.post(
   wrapAsync(createCharge),
   wrapAsync(updateTransactionStatus),
   wrapAsync(sendEmail),
-  returnInvoiceData
+  returnConfirmationData
 );
 
 logger.verbose('added /payment routes');

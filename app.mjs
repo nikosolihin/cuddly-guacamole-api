@@ -6,6 +6,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import { notFound, developmentErrors, productionErrors } from './lib/errors';
 import paymentRoutes from './routes/payment';
+import newsletterRoutes from './routes/newsletter';
 
 const app = express();
 
@@ -34,6 +35,7 @@ app.use(cookieParser());
 // app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/payment', paymentRoutes);
+app.use('/newsletter', newsletterRoutes);
 
 // catch 404 for routes not found
 app.use(notFound);
