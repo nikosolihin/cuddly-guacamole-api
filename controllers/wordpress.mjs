@@ -1,15 +1,36 @@
 import createError from 'http-errors';
 import getLogger from '../lib/logger';
+import { formatAmount } from './helpers';
+import { isExistingTrx, createTrx, updateTrx } from '../lib/transaction';
 
 const logger = getLogger('controllers/wordpress');
 
 /**
- * Initiate credit card charge
+ * Create a new transaction
  */
-export const upsertTransaction = async (req, res) => {
-  // Check if tx exist here not in lib!
-  //
-  // const { tokenId, maskedCard, amount, cvc } = req.body;
-  // const { status, data } = await chargeCard(tokenId, maskedCard, amount, cvc);
-  // return res.status(status).json(data);
+export const createTransaction = async (req, res, next) => {
+  const { trxId } = req.body;
+  const transaction = await isExistingTrx(trxId);
+  if (!transaction) {
+    const newTrxId = await createTrx({ payload });
+    res.locals.trxId = newTrxId;
+  } else {
+    await updateTrx(trxId, { payload });
+    res.locals.trxId = trxId;
+  }
+  return next();
+};
+
+/**
+ * Update a transaction
+ */
+export const updateTransactionStatus = async (req, res, next) => {
+  const { trxId } = req.body;
+  const {
+    data: { status },
+  } = res.locals.payment;
+  res.locals.transaction = await updateTrx(trxId, {
+    status: status === 'CAPTURED' ? 'success' : 'failed',
+  });
+  return next();
 };

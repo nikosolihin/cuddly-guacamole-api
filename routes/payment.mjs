@@ -1,17 +1,24 @@
 import express from 'express';
 import getLogger from '../lib/logger';
 import { wrapAsync } from '../lib/errors';
-import { checkBody, createCharge } from '../controllers/payment';
+import { checkBody, createCharge, returnInvoiceData } from '../controllers/payment';
+import { createTransaction, updateTransactionStatus } from '../controllers/wordpress';
+import { sendEmail } from '../controllers/confirmation';
 
 const router = express.Router();
 const logger = getLogger('routes/payment');
 
 logger.verbose('adding /payment routes...');
 
-// checkbody, write to wp as initiated, createCharge, write status to wp
-
-router.post('/card/charge', checkBody, wrapAsync(createCharge));
-// router.post('/card/recur', checkBody, catchErrors(createCharge));
+router.post(
+  '/card/charge',
+  checkBody,
+  wrapAsync(createTransaction),
+  wrapAsync(createCharge),
+  wrapAsync(updateTransactionStatus),
+  wrapAsync(sendEmail),
+  returnInvoiceData
+);
 
 logger.verbose('added /payment routes');
 
