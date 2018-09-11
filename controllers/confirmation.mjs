@@ -1,20 +1,24 @@
-import createError from 'http-errors';
 import getLogger from '../lib/logger';
-import { send } from '../lib/mail';
+import { sendEmail } from '../lib/mail';
 
 const logger = getLogger('controllers/confirmation');
 
 /**
  * Send a confirmation email based on transaction status
  */
-export const sendEmail = async (req, res, next) => {
-  // const { trxId } = res.locals.payment;
-  // const { trxId } = res.locals.transaction;
-  // // Format prices
-  // txData.onetimeAmount = txData.onetimeAmount ? formatPrice(txData.onetimeAmount) : '-';
-  // txData.sponsorshipAmount = txData.sponsorshipAmount ? formatPrice(txData.sponsorshipAmount) : '-';
-  // txData.totalAmount = formatPrice(txData.totalAmount);
-  // const result = await sendEmail(false, status === 'SUCCESS', txData, donorData);
+export const sendPaymentConfirmation = async (req, res, next) => {
+  // const { paymentData } = res.locals.payment;
+  // const { transactionData } = res.locals.transaction;
+  const to = 'nikosolihin@gmail.com';
+  const isSuccess = true;
+  const template = isSuccess ? 'success' : 'failed';
+  const subject = isSuccess ? process.env.CONFIRMATION_SUCCESS : process.env.CONFIRMATION_FAILED;
+  const data = {
+    name: 'Niko Solihin',
+  };
+  logger.verbose(`Sending a %s email to %s`, isSuccess ? 'confirmation' : 'rejection', to);
+  const result = await sendEmail(to, subject, template, data);
+  return next();
 };
 
 /**

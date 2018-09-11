@@ -12,6 +12,7 @@ export const upsertDonor = async (req, res, next) => {
   const isSubscriber = subscriber.status !== 404;
   logger.verbose(`%s %s already in the list`, email, isSubscriber ? 'is' : 'is not');
   if (isSubscriber) {
+    // lets handle this in the error handler
     res.status(200).json({
       error: `${email} is already in the mailing list`,
     });
