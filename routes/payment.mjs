@@ -3,7 +3,7 @@ import getLogger from '../lib/logger';
 import { wrapAsync } from '../lib/errors';
 import { checkBody } from '../controllers';
 import { createCharge } from '../controllers/payment';
-import { createTransaction, updateTransactionStatus } from '../controllers/wordpress';
+import { upsertDonor, createTransaction, updateTransactionStatus } from '../controllers/wordpress';
 import { sendPaymentConfirmation, returnConfirmationData } from '../controllers/confirmation';
 
 const router = express.Router();
@@ -14,14 +14,13 @@ logger.verbose('adding /payment routes...');
 router.post(
   '/card/charge',
   checkBody,
+  wrapAsync(upsertDonor),
   wrapAsync(createTransaction),
   wrapAsync(createCharge),
   wrapAsync(updateTransactionStatus),
   wrapAsync(sendPaymentConfirmation),
   returnConfirmationData
 );
-
-router.post('/email', wrapAsync(sendPaymentConfirmation));
 
 logger.verbose('added /payment routes');
 

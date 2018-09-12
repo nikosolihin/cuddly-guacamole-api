@@ -7,17 +7,18 @@ const logger = getLogger('controllers/confirmation');
  * Send a confirmation email based on transaction status
  */
 export const sendPaymentConfirmation = async (req, res, next) => {
-  // const { paymentData } = res.locals.payment;
-  // const { transactionData } = res.locals.transaction;
-  const to = 'nikosolihin@gmail.com';
-  const isSuccess = true;
+  const { email: to } = res.locals.donor;
+  const { status } = res.locals.payment;
+  const isSuccess = status === 'CAPTURED';
   const template = isSuccess ? 'success' : 'failed';
   const subject = isSuccess ? process.env.CONFIRMATION_SUCCESS : process.env.CONFIRMATION_FAILED;
   const data = {
-    name: 'Niko Solihin',
+    ...res.locals.donor,
+    ...res.locals.payment,
+    ...res.locals.transaction,
   };
-  logger.verbose(`Sending a %s email to %s`, isSuccess ? 'confirmation' : 'rejection', to);
-  const result = await sendEmail(to, subject, template, data);
+  logger.verbose('Sending a %s email to %s...', isSuccess ? 'confirmation' : 'rejection', to);
+  await sendEmail(to, subject, template, data);
   return next();
 };
 
@@ -25,9 +26,13 @@ export const sendPaymentConfirmation = async (req, res, next) => {
  * Return data needed by the frontend confirmation screen
  */
 export const returnConfirmationData = async (req, res, next) => {
-  // const { name } = res.locals.payment;
-  // const { name } = res.locals.transaction;
-  // res.status(200).json({
-  //   name,
-  // });
+  const { trxId, status: trxStatus } = res.locals.transaction;
+  const { created, status: paymentStatus } = res.locals.payment;
+  logger.verbose('Sending payment confirmation data to the frontend...');
+  return res.status(200).json({
+    trxId,
+    trxStatus,
+    paymentStatus,
+    created,
+  });
 };

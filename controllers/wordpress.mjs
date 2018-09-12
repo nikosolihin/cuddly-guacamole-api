@@ -1,21 +1,23 @@
 import getLogger from '../lib/logger';
-import { isExistingTrx, createTrx, updateTrx } from '../lib/transaction';
+import { isExistingDonor, createDonor } from '../lib/donor';
+import { createTrx, updateTrx } from '../lib/transaction';
 
 const logger = getLogger('controllers/wordpress');
 
 /**
- * Create a new transaction
+ * Transaction is uniquely new every time.
+ * Must create a new transaction.
  */
 export const createTransaction = async (req, res, next) => {
-  const { trxId } = req.body;
-  const transaction = await isExistingTrx(trxId);
-  if (!transaction) {
-    const newTrxId = await createTrx({ payload });
-    res.locals.trxId = newTrxId;
-  } else {
-    await updateTrx(trxId, { payload });
-    res.locals.trxId = trxId;
-  }
+  const { id: donor, first, last, email, phone } = res.locals.donor;
+  const { activity, amount, method } = req.body;
+  res.locals.transaction = await createTrx({
+    amount,
+    method,
+    activity,
+    donor,
+    keywords: `${first} ${last} ${email} ${phone}`,
+  });
   return next();
 };
 
@@ -23,12 +25,25 @@ export const createTransaction = async (req, res, next) => {
  * Update a transaction
  */
 export const updateTransactionStatus = async (req, res, next) => {
-  const { trxId } = req.body;
-  const {
-    data: { status },
-  } = res.locals.payment;
+  const { trxId } = res.locals.transaction;
+  const { status } = res.locals.payment;
   res.locals.transaction = await updateTrx(trxId, {
     status: status === 'CAPTURED' ? 'success' : 'failed',
   });
+  return next();
+};
+
+/**
+ * Donor can be past donor - upsert donor.
+ */
+export const upsertDonor = async (req, res, next) => {
+  const { phone } = req.body;
+  const donor = await isExistingDonor(phone);
+  logger.verbose('This donor %s in the database', !donor ? 'does not exist' : 'exists');
+  if (!donor) {
+    res.locals.donor = await createDonor(req.body);
+  } else {
+    res.locals.donor = donor;
+  }
   return next();
 };

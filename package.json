@@ -1,13 +1,18 @@
 {
-  "name": "api.yicf.org",
+  "name": "yicf-giving-api",
   "version": "1.0.0",
   "private": true,
   "main": "index.mjs",
-  "scripts": {
-    "start": "NODE_ENV=development DEBUG=yicf-giving-api:* nodemon -r dotenv/config --experimental-modules --nolazy --inspect index.mjs"
-  },
   "engines": {
     "node": "10.x.x"
+  },
+  "scripts": {
+    "start": "nodemon --experimental-modules index.mjs",
+    "dev": "NODE_ENV=development DEBUG=yicf-giving-api:* nodemon -r dotenv/config --experimental-modules --nolazy --inspect index.mjs"
+  },
+  "now": {
+    "alias": "yicf",
+    "dotenv": true
   },
   "dependencies": {
     "axios": "^0.18.0",
@@ -22,7 +27,9 @@
     "helmet": "^3.13.0",
     "http-errors": "^1.7.1",
     "jwks-rsa": "^1.3.0",
+    "lodash.isempty": "^4.4.0",
     "mailgun-js": "^0.20.0",
+    "nodemon": "^1.18.4",
     "path": "^0.12.7",
     "pug": "^2.0.3",
     "winston": "^3.1.0",

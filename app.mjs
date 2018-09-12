@@ -15,7 +15,7 @@ const app = express();
 
 app.use(cors());
 app.use(helmet());
-app.use(requireValidJWT.unless({ path: ['/payment/email'] }));
+app.use(requireValidJWT.unless({ path: ['/payment/*'] }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
